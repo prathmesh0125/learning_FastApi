@@ -1,4 +1,4 @@
-from fastapi  import FastAPI, Form ,File
+from fastapi  import FastAPI, Form ,File,UploadFile
 app= FastAPI()
 from typing import Union
 from enum import Enum
@@ -62,3 +62,8 @@ async def form_data(username:str=Form(),password:str =Form()):
 @app.post("/file/length")
 async def file_lenght(file:bytes = File()):
     return {"file": len(file)}
+ 
+#  file upload
+@app.post("/file/upload")
+async def file_upload(file: UploadFile):
+    return {"file-name": file.filename,"content":file.content_type}
