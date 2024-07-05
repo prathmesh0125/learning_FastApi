@@ -1,4 +1,4 @@
-from fastapi  import FastAPI, Form ,File,UploadFile
+from fastapi  import FastAPI, Form ,File,UploadFile,HTTPException
 app= FastAPI()
 from typing import Union
 from enum import Enum
@@ -67,3 +67,17 @@ async def file_lenght(file:bytes = File()):
 @app.post("/file/upload")
 async def file_upload(file: UploadFile):
     return {"file-name": file.filename,"content":file.content_type}
+ 
+# error handling
+@app.get("/error/handling")
+async def handle_error(item:int):
+   if item==2:
+      return HTTPException(status_code=400,detail="item is not equal to 2 try anothe value") 
+   return{"value":item}
+
+items=[1,2,3,4,5]
+@app.get('/error/value')
+async def value_present(number:int):
+  if number not in items:
+     return HTTPException(status_code=400,detail="value is not present in array")
+  return {"value":number}
